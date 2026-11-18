@@ -35,3 +35,10 @@ A second deliberate choice: delta-seconds larger than `Number.MAX_SAFE_INTEGER` 
 - Leading and trailing whitespace around the value is trimmed; internal whitespace is not allowed.
 - An HTTP-date in the past yields a delay of `0` from `retryAfterDelayMs`, not a negative number.
 - `retryAfterDelayMs` returns `null` for invalid parsed values, so callers can distinguish "no delay" from "no answer".
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
